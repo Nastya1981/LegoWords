@@ -10,6 +10,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     ImageView imageView;
     public int level = 0;
@@ -17,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
             "cat",
             "fox",
             "duck",
-            "squirell"
+            "squirrel"
     };
     String[] words = {
             "КОТ",
@@ -33,17 +37,19 @@ public class MainActivity extends AppCompatActivity {
         buildWord();
     }
     public void buildWord(){
-        imageView.setImageResource (this
+        imageView.setImageResource(this
                 .getResources()
                 .getIdentifier(images[level], "drawable", this
                         .getPackageName()));
-
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.layoutChars);
         String word = words[level];
         final int word_len = word.length();
         Button[] buttons = new Button[word.length()];
+        List<Character> solution = new ArrayList<>();
         final char[] chars = word.toCharArray();
         for (int i = 0; i < word_len; i++) {
+
             buttons[i] = new Button(this);
             buttons[i].setTextSize(65);
             buttons[i].setWidth(100);
@@ -51,7 +57,13 @@ public class MainActivity extends AppCompatActivity {
         }
         for (int i = 0; i < word_len; i++) {
             // buttons[i].setId(i);
-            buttons[i].setText(Character.toString(chars[i]));
+            solution.add(chars[i]);
+            //buttons[i].setText(Character.toString(chars[i]));
+          //  linearLayout.addView(buttons[i]);
+        }
+        Collections.shuffle(solution);
+        for (int i = 0; i < word_len; i++) {
+            buttons[i].setText(Character.toString(solution.get(i)));
             linearLayout.addView(buttons[i]);
         }
         buttons[0].getText();
