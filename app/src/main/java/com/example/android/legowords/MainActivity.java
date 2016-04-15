@@ -21,13 +21,13 @@ public class MainActivity extends AppCompatActivity {
             "cat",
             "fox",
             "duck",
-            "squirrel"
+            "cock"
     };
     String[] words = {
             "КОТ",
             "ЛИСА",
             "УТКА",
-            "БЕЛКА"
+            "ПЕТУХ"
     };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
