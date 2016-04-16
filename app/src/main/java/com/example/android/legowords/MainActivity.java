@@ -2,6 +2,7 @@ package com.example.android.legowords;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,56 +26,66 @@ public class MainActivity extends AppCompatActivity {
             "УТКА",
             "БЕЛКА"
     };
+    private LinearLayout mLinearLayout;
+    private TextView mTxt1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         imageView = (ImageView)findViewById(R.id.image_word);
+        mLinearLayout = (LinearLayout) findViewById(R.id.layoutChars);
+        mTxt1 = (TextView) findViewById(R.id.txt1);
         buildWord();
     }
     public void buildWord(){
         imageView.setImageResource (this
                 .getResources()
-                .getIdentifier(images[level], "drawable", this
+                .getIdentifier("fox", "drawable", this
                         .getPackageName()));
 
-        final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.layoutChars);
+
         String word = words[level];
         final int word_len = word.length();
         Button[] buttons = new Button[word.length()];
         final char[] chars = word.toCharArray();
+        LayoutInflater inflater = getLayoutInflater();
+
+
         for (int i = 0; i < word_len; i++) {
-            buttons[i] = new Button(this);
+            buttons[i] = (Button)inflater.inflate(R.layout.btn_lay,null);
             buttons[i].setTextSize(65);
             buttons[i].setWidth(100);
             buttons[i].setHeight(100);
-        }
-        for (int i = 0; i < word_len; i++) {
-            // buttons[i].setId(i);
             buttons[i].setText(Character.toString(chars[i]));
-            linearLayout.addView(buttons[i]);
+        }
+
+
+        for (Button btn:buttons) {
+            // buttons[i].setId(i);
+            mLinearLayout.addView(btn);
         }
         buttons[0].getText();
 
-        final TextView txt1 = (TextView) findViewById(R.id.txt1);
+
         final View.OnClickListener oclBtnOk = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                final String letter = Character.toString(chars[txt1.length()]);
+                final String letter = Character.toString(chars[mTxt1.length()]);
                 Button button = (Button) v;
                 String s = button.getText().toString();
                 if (letter.equals(s)) {
-                    txt1.setText(txt1.getText().toString() + button.getText().toString());
-                    if (txt1.length() == word_len){
+                    mTxt1.setText(mTxt1.getText().toString() + button.getText().toString());
+                    if (mTxt1.length() == word_len){
                         if(level != 3) {
                             level++;
-                            linearLayout.removeView(button);
-                            txt1.setText("");
+                            mLinearLayout.removeView(button);
+                            mTxt1.setText("");
                             buildWord();
                         }
                     }
-                    linearLayout.removeView(button);
+                    mLinearLayout.removeView(button);
                 }
             }
         };
