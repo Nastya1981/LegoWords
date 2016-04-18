@@ -2,6 +2,7 @@ package com.example.android.legowords;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,9 +12,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity {
-    ImageView imageView;
     public int level = 0;
+    ImageView imageView;
+    Map<String, Integer> wordAndDrawables = new HashMap<>();
+
     String[] images = {
             "cat",
             "fox",
@@ -32,14 +38,30 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        imageView = (ImageView)findViewById(R.id.image_word);
-        mLinearLayout = (LinearLayout) findViewById(R.id.layoutChars);
-        mTxt1 = (TextView) findViewById(R.id.txt1);
-        buildWord();
+        showSplash();
+
+//
+//        setContentView(R.layout.activity_main);
+//        imageView = (ImageView) findViewById(R.id.image_word);
+//        mLinearLayout = (LinearLayout) findViewById(R.id.layoutChars);
+//        mTxt1 = (TextView) findViewById(R.id.txt1);
+//        fillWordsMap();
+////        buildWord();
     }
-    public void buildWord(){
-        imageView.setImageResource (this
+
+    private void showSplash() {
+
+    }
+
+    private void fillWordsMap() {
+        String[] strings = getResources().getStringArray(R.array.words);
+        for (String string: strings){
+            Log.e("Words",string);
+        }
+    }
+
+    public void buildWord() {
+        imageView.setImageResource(this
                 .getResources()
                 .getIdentifier("fox", "drawable", this
                         .getPackageName()));
@@ -53,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         for (int i = 0; i < word_len; i++) {
-            buttons[i] = (Button)inflater.inflate(R.layout.btn_lay,null);
+            buttons[i] = (Button) inflater.inflate(R.layout.btn_lay, null);
             buttons[i].setTextSize(65);
             buttons[i].setWidth(100);
             buttons[i].setHeight(100);
@@ -61,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        for (Button btn:buttons) {
+        for (Button btn : buttons) {
             // buttons[i].setId(i);
             mLinearLayout.addView(btn);
         }
@@ -77,8 +99,8 @@ public class MainActivity extends AppCompatActivity {
                 String s = button.getText().toString();
                 if (letter.equals(s)) {
                     mTxt1.setText(mTxt1.getText().toString() + button.getText().toString());
-                    if (mTxt1.length() == word_len){
-                        if(level != 3) {
+                    if (mTxt1.length() == word_len) {
+                        if (level != 3) {
                             level++;
                             mLinearLayout.removeView(button);
                             mTxt1.setText("");
@@ -93,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
             buttons[i].setOnClickListener(oclBtnOk);
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

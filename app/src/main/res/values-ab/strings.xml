@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LegoWords</string>
+    <string-array name="words">
+        <item>1Fox</item>
+        <item>1Fox1</item>
+        <item>1Fox2</item>
+        <item>1Fox3</item>
+        <item>1Fox4</item>
+    </string-array>
+</resources>
