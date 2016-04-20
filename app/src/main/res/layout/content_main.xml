@@ -10,6 +10,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="#69f0ae"
     android:orientation="vertical"
+    android:id="@+id/mainLinearLayout"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.android.legowords.MainActivity"
     tools:showIn="@layout/activity_main">
