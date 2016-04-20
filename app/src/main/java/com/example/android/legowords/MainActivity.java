@@ -13,121 +13,109 @@ import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    ImageView imageView;
-    public int level = 0;
-    int countLetter = 0;
+    private LinearLayout mLinearLayoutLetters;
+    private LinearLayout mLinearLayoutForLetters;
+    private ImageView mImageView;
+    private TextView[] mLetters;
+
+    private int mLevel = 0;
+    private int mcountLetter = 0;
+    private String[] mArrayWords;
+    private String[] mArrayImages;
+
     String printWord = "";
-    String[] images = {
-            "cat",
-            "fox",
-            "duck",
-            "cock"
-    };
-    String[] words = {
-            "КОТ",
-            "ЛИСА",
-            "УТКА",
-            "ПЕТУХ"
-    };
+    String mWord;
+    int mWordLength;
+    char[] chars;
+    Button[] buttons;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        imageView = (ImageView)findViewById(R.id.image_word);
-        buildWord();
+
+        mLinearLayoutLetters = (LinearLayout) findViewById(R.id.layout_letters);
+        mLinearLayoutForLetters = (LinearLayout) findViewById(R.id.layout_textview);
+        mImageView = (ImageView)findViewById(R.id.image_word);
+        mArrayWords = getResources().getStringArray(R.array.words);
+        mArrayImages = getResources().getStringArray(R.array.images);
+        LegoWord();
     }
-    public void buildWord(){
-        countLetter = 0;
-        imageView.setImageResource(this
-                .getResources()
-                .getIdentifier(images[level], "drawable", this
-                        .getPackageName()));
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.layoutChars);
-        final LinearLayout linearLayoutTextView = (LinearLayout) findViewById(R.id.layout_textview);
-        String word = words[level];
-        final int word_len = word.length();
-        /*go to the next level*/
-        final Button buttonOk = new Button(this);
-        buttonOk.setWidth(100);
-        buttonOk.setHeight(100);
-        buttonOk.setBackgroundResource(this
-                .getResources()
-                .getIdentifier("ok", "drawable", this
-                        .getPackageName()));
-        Button[] buttons = new Button[word.length()];
-        final TextView[] textViews = new TextView[word.length()];
-        List<Character> solution = new ArrayList<>();
-        final char[] chars = word.toCharArray();
-        for (int i = 0; i < word_len; i++) {
-
-            buttons[i] = new Button(this);
-            buttons[i].setTextSize(65);
-            buttons[i].setWidth(100);
-            buttons[i].setHeight(100);
-            textViews[i] = new TextView(this);
-            textViews[i].setBackgroundResource(this
-                    .getResources()
-                    .getIdentifier("roundrect", "drawable", this
-                            .getPackageName()));
-            textViews[i].setTextSize(55);
-            textViews[i].setWidth(100);
-            textViews[i].setHeight(100);
-        }
-        for (int i = 0; i < word_len; i++) {
-            solution.add(chars[i]);
-            //buttons[i].setText(Character.toString(chars[i]));
-          //  linearLayout.addView(buttons[i]);
-        }
-        if(level > 0)
-            Collections.shuffle(solution);
-        for (int i = 0; i < word_len; i++) {
-            buttons[i].setText(Character.toString(solution.get(i)));
-            linearLayout.addView(buttons[i]);
-            linearLayoutTextView.addView(textViews[i]);
-        }
-        buttons[0].getText();
-
-        final TextView txt1 = (TextView) findViewById(R.id.txt1);
-
-
-        final View.OnClickListener oclBtnLetter = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                final String letter = Character.toString(chars[txt1.length()]);
-                Button button = (Button) v;
-                String buttonLetter = button.getText().toString();
-                if (letter.equals(buttonLetter)) {
-                    textViews[countLetter].setText(button.getText().toString());
-                    countLetter++;
-                    txt1.setText(txt1.getText().toString() + button.getText().toString());
-                    printWord += button.getText().toString();
-                    if (txt1.length() == word_len){
-                        if(level != 3) {
-                            level++;
-                            linearLayout.removeView(button);
-                            txt1.setText("");
-
-                            printWord= "";
-                            linearLayoutTextView.addView(buttonOk);
-                        }
+    public void LegoWord(){
+        init();
+        setImageView(mArrayImages[mLevel]);
+        List <Character> shuffleLetters = shuffleLetters();
+        createLetters(shuffleLetters);
+        createContainerForLetter();
+    }
+    View.OnClickListener oclBtnLetter = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            String letter = Character.toString(chars[printWord.length()]);
+            Button button = (Button) v;
+            String buttonLetter = button.getText().toString();
+            if (letter.equals(buttonLetter)) {
+                mLetters[mcountLetter].setText(button.getText().toString());
+                mcountLetter++;
+                printWord += button.getText().toString();
+                if (printWord.length() == mWord.length()){
+                    if(mLevel != 3) {
+                        mLevel++;
+                        mLinearLayoutLetters.removeView(button);
+                        mLinearLayoutForLetters.removeAllViews();
+                        LegoWord();
+                        // mTextView.addView(buttonOk);
                     }
-                    linearLayout.removeView(button);
                 }
-
+                mLinearLayoutLetters.removeView(button);
             }
-        };
-        final View.OnClickListener oclBtnOk = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                linearLayoutTextView.removeAllViews();
-                buildWord();
-            }
-        };
-        buttonOk.setOnClickListener(oclBtnOk);
-        for (int i = 0; i < word.length(); i++) {
-            buttons[i].setOnClickListener(oclBtnLetter);
         }
+    };
+    public void init(){
+        mWord = mArrayWords[mLevel];
+        mWordLength = mWord.length();
+        chars = mWord.toCharArray();
+        mcountLetter = 0;
+        printWord= "";
+    }
+    public void setImageView(String image){
+        mImageView.setImageResource(this
+                .getResources()
+                .getIdentifier(image, "drawable", this
+                        .getPackageName()));
+        mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+    }
+    public void createLetters(List Letters){
+        buttons = new Button[mWordLength];
+        for (int i = 0; i < mWordLength; i++) {
+            buttons[i] = new Button(this);
+         /* buttons[i].setTextSize(65);
+            buttons[i].setWidth(100);
+            buttons[i].setHeight(100);*/
+            buttons[i].setText(String.valueOf(Letters.get(i)));
+            buttons[i].setOnClickListener(oclBtnLetter);
+            mLinearLayoutLetters.addView(buttons[i]);
+        }
+    }
+    public void createContainerForLetter(){
+        mLetters = new TextView[mWordLength];
+        for (int i = 0; i < mWordLength; i++) {
+            mLetters[i] = new TextView(this);
+            mLetters[i].setBackgroundResource(R.drawable.roundrect);
+            mLetters[i].setTextSize(55);
+            mLetters[i].setWidth(100);
+            mLetters[i].setHeight(100);
+            mLinearLayoutForLetters.addView(mLetters[i]);
+        }
+    }
+    public List shuffleLetters(){
+        List<Character> Letters = new ArrayList<>();
+        char[] chars = mWord.toCharArray();
+        for (int i = 0; i < mWord.length(); i++) {
+            Letters.add(chars[i]);
+        }
+        if(mLevel > 0)
+            Collections.shuffle(Letters);
+        return Letters;
     }
 }

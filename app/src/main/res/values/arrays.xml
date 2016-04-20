@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="images">
+        <item>cat</item>
+        <item>fox</item>
+        <item>duck</item>
+        <item>cock</item>
+    </string-array>
+    <string-array name="words">
+        <item>КОТ</item>
+        <item>ЛИСА</item>
+        <item>УТКА</item>
+        <item>ПЕТУХ</item>
+    </string-array>
+</resources>
