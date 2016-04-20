@@ -1,5 +1,6 @@
 package com.example.android.legowords;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     String printWord = "";
     String mWord;
     int mWordLength;
+    //Можешь использовать String вместо масива символов и брать букву через .charAt()
     char[] chars;
     Button[] buttons;
 
@@ -41,6 +43,12 @@ public class MainActivity extends AppCompatActivity {
         mArrayImages = getResources().getStringArray(R.array.images);
         LegoWord();
     }
+    /**
+     * Делай Reformat Code, Optimize Imports перед комитом.
+     * Имена методов первая буква строчная
+     * Удалил кота, он слишком тяжелый
+     */
+
     public void LegoWord(){
         init();
         setImageView(mArrayImages[mLevel]);
@@ -51,9 +59,11 @@ public class MainActivity extends AppCompatActivity {
     View.OnClickListener oclBtnLetter = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            //Зачем из буквы делать слово?
             String letter = Character.toString(chars[printWord.length()]);
             Button button = (Button) v;
             String buttonLetter = button.getText().toString();
+            //Можешь
             if (letter.equals(buttonLetter)) {
                 mLetters[mcountLetter].setText(button.getText().toString());
                 mcountLetter++;
@@ -79,16 +89,15 @@ public class MainActivity extends AppCompatActivity {
         printWord= "";
     }
     public void setImageView(String image){
-        mImageView.setImageResource(this
-                .getResources()
-                .getIdentifier(image, "drawable", this
-                        .getPackageName()));
+        mImageView.setImageResource(getResources().getIdentifier(image, "drawable", getPackageName()));
         mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
     }
+    @SuppressLint("InflateParams")
     public void createLetters(List Letters){
         buttons = new Button[mWordLength];
         for (int i = 0; i < mWordLength; i++) {
-            buttons[i] = new Button(this);
+            buttons[i] = (Button)getLayoutInflater().inflate(R.layout.letter,null);
+//            buttons[i] = new Button(this);
          /* buttons[i].setTextSize(65);
             buttons[i].setWidth(100);
             buttons[i].setHeight(100);*/
@@ -100,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
     public void createContainerForLetter(){
         mLetters = new TextView[mWordLength];
         for (int i = 0; i < mWordLength; i++) {
+            //Тут также если нужно
             mLetters[i] = new TextView(this);
             mLetters[i].setBackgroundResource(R.drawable.roundrect);
             mLetters[i].setTextSize(55);
@@ -114,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < mWord.length(); i++) {
             Letters.add(chars[i]);
         }
+        //Используй фигурные скобки
         if(mLevel > 0)
             Collections.shuffle(Letters);
         return Letters;
