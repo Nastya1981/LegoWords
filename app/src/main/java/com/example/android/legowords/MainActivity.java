@@ -130,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         }
         return true;
     }
+
     View.OnClickListener oclBtnLetter = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
